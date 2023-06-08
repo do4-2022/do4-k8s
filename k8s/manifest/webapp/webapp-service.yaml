@@ -4,6 +4,7 @@ metadata:
   name: webapp
   namespace: julien-dubois
 spec:
+  type: LoadBalancer
   selector:
     app: webapp
   ports:
