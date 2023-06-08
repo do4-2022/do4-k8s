@@ -16,6 +16,15 @@ Create namespace:
 kubectl apply -f namespace.yaml
 ```
 
+Deploy Postgres:
+
+```bash
+kubectl apply -f postgres/postgres-pv.yaml
+kubectl apply -f postgres/postgres-pvc.yaml
+kubectl apply -f postgres/postgres-deployment.yaml
+kubectl apply -f postgres/postgres-service.yaml
+```
+
 Deploy Counter API:
 
 ```bash
@@ -23,7 +32,7 @@ kubectl apply -f counterapi/counterapi-deployment.yaml
 kubectl apply -f counterapi/counterapi-service.yaml
 ```
 
-Deploy webapp:
+Deploy Webapp:
 
 ```bash
 kubectl apply -f webapp/webapp-deployment.yaml
