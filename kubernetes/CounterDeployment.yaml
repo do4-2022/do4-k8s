@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: counter
+  namespace: yann-pomie
+  labels:
+    app: counter
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: counter
+  template:
+    metadata:
+      name: counter
+      labels:
+        app: counter
+    spec:
+      containers:
+        - name: counter
+          image: woodenmaiden/counter-service:latest
+          imagePullPolicy: IfNotPresent # configuration will soon be pushed
+          ports:
+            - containerPort: 8080
+        - name: redis
+          image: bitnami/redis:latest
+          imagePullPolicy: IfNotPresent
+      restartPolicy: Always
+      

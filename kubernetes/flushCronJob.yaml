@@ -1,0 +1,21 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: flush-cron-job
+  namespace: yann-pomie
+spec:
+  schedule: "2 * * * *" #	Run every 2 minutes
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: cronjob
+              image: busybox:latest
+              imagePullPolicy: IfNotPresent
+              command:
+                - /bin/curl
+                - -X
+                - POST
+                - http://counter-service/flush
+          restartPolicy: OnFailure
