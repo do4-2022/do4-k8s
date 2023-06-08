@@ -10,7 +10,7 @@ app.get("/health", async (req, res) => {
   let response;
 
   try {
-    response = await axios.get("http://localhost:3001/health");
+    response = await axios.get(`${process.env.APP_URL}/health`);
   } catch (err) {
     console.log(err.message);
     return res.status(500).send("Internal Server Error");
@@ -25,7 +25,7 @@ app.post("/increment", async (req, res) => {
   let response;
 
   try {
-    response = await axios.post("http://localhost:3001/increment");
+    response = await axios.post(`${process.env.APP_URL}/increment`);
   } catch (err) {
     console.log(err.message);
     return res.status(500).send("Internal Server Error");
