@@ -23,5 +23,5 @@ spec:
               value: "yes"
           resources:
             limits:
-              memory: "1024Mi"
-              cpu: "1000m"
+              memory: "128Mi"
+              cpu: "100m"
