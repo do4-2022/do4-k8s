@@ -1,0 +1,29 @@
+name: Docker Image CI - Build and push
+
+on:
+  push:
+    branches: [alexis-bernard]
+
+jobs:
+  build_and_push_images:
+    runs-on: ubuntu-latest
+    environment: alexis-bernard
+    strategy:
+      matrix:
+        service: [app, gateway]
+
+    steps:
+      # Checkout repository
+      - name: Clone repository
+        uses: actions/checkout@v2
+
+      # Build and push docker image
+      - name: Build ${{matrix.service}} docker image
+        run: docker build ${{matrix.service}} -t ascoz/k8s-${{matrix.service}}:latest
+      - name: Docker hub login
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+      - name: Push docker image
+        run: docker image push ascoz/k8s-${{matrix.service}}:latest
