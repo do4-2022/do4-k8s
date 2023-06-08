@@ -3,10 +3,14 @@ const { createClient } = require("redis");
 const service = class {
   constructor() {
     this.client = createClient({
-      host: process.env.REDIS_HOST || "localhost",
+      socket: {
+        host: process.env.REDIS_HOST || "localhost",
+      },
     });
 
     this.client.on("error", (err) => console.log("Redis Client Error", err));
+
+    this.client.on("connect", () => console.log("✅ Redis Client Connected"));
   }
 
   async init() {
