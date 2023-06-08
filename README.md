@@ -16,6 +16,13 @@ Create namespace:
 kubectl apply -f namespace.yaml
 ```
 
+Deploy Counter API:
+
+```bash
+kubectl apply -f counterapi/counterapi-deployment.yaml
+kubectl apply -f counterapi/counterapi-service.yaml
+```
+
 Deploy webapp:
 
 ```bash
