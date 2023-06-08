@@ -20,19 +20,25 @@ const postgresUrl =
 let client: Client | undefined;
 
 async function initDb() {
-  try {
-    client = new Client(postgresUrl);
-    await client.connect();
-    // create the table if it does not exist
-    await client.queryArray(
-      "CREATE TABLE IF NOT EXISTS counter (  id SERIAL PRIMARY KEY,  count INTEGER NOT NULL"
-    );
-    await client.queryArray(
-      "INSERT INTO my_table (id, count) VALUES (0, 0) ON CONFLICT (id) DO NOTHING;"
-    );
-  } catch (err) {
-    console.log(err);
-    client = undefined;
+  let connected = false;
+
+  while (!connected) {
+    try {
+      client = new Client(postgresUrl);
+      await client.connect();
+      // create the table if it does not exist
+      await client.queryArray(
+        "CREATE TABLE IF NOT EXISTS counter (  id SERIAL PRIMARY KEY,  count INTEGER NOT NULL"
+      );
+      await client.queryArray(
+        "INSERT INTO my_table (id, count) VALUES (0, 0) ON CONFLICT (id) DO NOTHING;"
+      );
+      connected = true;
+    } catch (err) {
+      console.log(err);
+      client = undefined;
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+    }
   }
 }
 async function checkDb() {

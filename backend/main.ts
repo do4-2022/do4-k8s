@@ -23,8 +23,6 @@ router.post("/increment", async () => {
   };
 });
 
-app.use((ctx) => {
-  ctx.response.body = "Hello World!";
-});
+app.use(router.routes());
 
 await app.listen({ port: 3001 });

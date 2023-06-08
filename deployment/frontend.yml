@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: counter-webapp
+  namespace: nils-ponsard
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: counter-webapp
+  template:
+    metadata:
+      labels:
+        app: counter-webapp
+    spec:
+      containers:
+        - name: counter-webapp
+          image: sautax/counter-fresh:latest
+          ports:
+            - containerPort: 8000
+          env:
+            - name: BACKEND
+              value: http://counter-api:3001
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: counter-webapp
+  namespace: nils-ponsard
+spec:
+  selector:
+    app: counter-webapp
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: 8000
+  type: LoadBalancer

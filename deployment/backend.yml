@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: counter-api
+  namespace: nils-ponsard
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: counter-api
+  template:
+    metadata:
+      labels:
+        app: counter-api
+    spec:
+      containers:
+        - name: counter-api
+          image: sautax/counter-ms:0.0.1        
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3001
+          env:
+            - name: POSTGRES_URL
+              value: postgres://postgres:postgres@postgres:5432/postgres
+        - name: redis
+          image: redis:latest
+          ports:
+            - containerPort: 6379
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: counter-api
+  namespace: nils-ponsard
+spec:
+  selector:
+    app: counter-api
+  ports:
+    - name: http
+      protocol: TCP
+      port: 3001
+      targetPort: 3001
+    - name: redis
+      protocol: TCP
+      port: 6379
+      targetPort: 6379

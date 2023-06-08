@@ -11,7 +11,7 @@ spec:
         spec:
           containers:
             - name: counter-cronjob
-              image: counter-cronjob:latest
+              image: sautax/counter-cronjob:latest
               imagePullPolicy: IfNotPresent
               env:
                 - name: REDIS_HOST
