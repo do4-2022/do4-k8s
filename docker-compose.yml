@@ -29,6 +29,8 @@ services:
     depends_on:
       - postgres
       - redis
+    ports:
+      - "3001:3001"
     environment:
       - SERVER_PORT=3001
       - POSTGRES_HOST=postgres
@@ -40,6 +42,8 @@ services:
     image: ascoz/k8s-gateway:latest
     depends_on:
       - app
+    ports:
+      - "3000:3000"
     environment:
       - SERVER_PORT=3000
       - APP_URL=http://app:3001
