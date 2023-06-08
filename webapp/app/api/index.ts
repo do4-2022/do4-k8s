@@ -15,6 +15,7 @@ export async function runRequest<BodyType, ReturnType>(
   method: HttpMethod,
   body?: BodyType
 ): Promise<ApiResponse<ReturnType>> {
+  console.log("Calling API: " + url + " with method: " + method);
   return fetch(url, {
     method,
     headers: {
@@ -26,10 +27,15 @@ export async function runRequest<BodyType, ReturnType>(
       data: response.status !== 204 ? await response.json() : undefined,
       status: response.status,
     }))
-    .catch(() => ({
-      data: undefined,
-      status: -1,
-    }));
+    .catch((error) => {
+      console.error(
+        `Error calling API: ${url} with method: ${method} (error: ${error})`
+      );
+      return {
+        data: undefined,
+        status: -1,
+      };
+    });
 }
 
 export async function runGetRequest<ReturnType>(
