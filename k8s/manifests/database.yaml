@@ -1,0 +1,68 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres
+  namespace: maxime-foucher
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+        - name: postgres
+          imagePullPolicy: IfNotPresent
+          image: bitnami/postgresql:15.3.0-debian-11-r10
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRESQL_USER
+              value: postgres
+            - name: POSTGRESQL_PASSWORD
+              value: postgres
+            - name: POSTGRESQL_DATABASE
+              value: postgres
+          volumeMounts:
+            - name: database-volume
+              mountPath: "/bitnami/postgresql"
+      volumes:
+        - name: database-volume
+          persistentVolumeClaim:
+            claimName: database-pvc
+      securityContext:
+        runAsUser: 0
+        fsGroup: 1001
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres
+  namespace: maxime-foucher
+spec:
+  selector:
+    app: postgres
+  ports:
+    - protocol: TCP
+      port: 5432
+      targetPort: 5432
+  type: ClusterIP
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: database-pvc
+  namespace: maxime-foucher
+  labels:
+    app: postgres
+spec:
+  storageClassName: do-block-storage-retain
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi

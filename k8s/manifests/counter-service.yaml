@@ -1,0 +1,59 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: counter-ms
+  namespace: maxime-foucher
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: counter-ms
+  template:
+    metadata:
+      labels:
+        app: counter-ms
+    spec:
+      containers:
+        - name: app
+          image: iverly/k8s-counter-service:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          env:
+            - name: QUARKUS_REDIS_HOSTS
+              value: redis://localhost:6379
+            - name: QUARKUS_DATASOURCE_JDBC_URL
+              value: jdbc:postgresql://postgres.maxime-foucher.svc.cluster.local:5432/postgres
+            - name: QUARKUS_DATASOURCE_USERNAME
+              value: postgres
+            - name: QUARKUS_DATASOURCE_PASSWORD
+              value: postgres
+          readinessProbe:
+            httpGet:
+              path: /q/health/ready
+              port: 8080
+            initialDelaySeconds: 3
+            periodSeconds: 3
+        - name: redis
+          image: bitnami/redis:6.2.12-debian-11-r16
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 6379
+          env:
+            - name: ALLOW_EMPTY_PASSWORD
+              value: "yes"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: counter-ms
+  namespace: maxime-foucher
+spec:
+  selector:
+    app: counter-ms
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+  type: ClusterIP
