@@ -2,7 +2,9 @@ const { createClient } = require("redis");
 
 const service = class {
   constructor() {
-    this.client = createClient();
+    this.client = createClient({
+      host: process.env.REDIS_HOST || "localhost",
+    });
 
     this.client.on("error", (err) => console.log("Redis Client Error", err));
   }
