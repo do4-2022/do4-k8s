@@ -23,3 +23,23 @@ services:
       - "6379:6379"
     environment:
       - ALLOW_EMPTY_PASSWORD=yes
+
+  app:
+    image: ascoz/k8s-app:latest
+    depends_on:
+      - postgres
+      - redis
+    environment:
+      - SERVER_PORT=3001
+      - POSTGRES_HOST=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
+
+  gateway:
+    image: ascoz/k8s-gateway:latest
+    depends_on:
+      - app
+    environment:
+      - SERVER_PORT=3000
+      - APP_URL=http://app:3001
