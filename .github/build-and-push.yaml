@@ -3,7 +3,7 @@ name: Build and Push Docker Images
 on:
   push:
     branches:
-      - master  # Ou la branche sur laquelle vous voulez que la CI s'exécute
+      - julien-dubois
 
 jobs:
   build-and-push:
