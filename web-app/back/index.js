@@ -7,11 +7,15 @@ app.get("/", (req, res) => {
 });
 
 app.get("/count", (req, res) => {
-  res.send(1);
+  res.send("1");
 });
 
 app.post("/count", (req, res) => {
-  res.send(2);
+  res.send("2");
+});
+
+app.get("/health", (req, res) => {
+  res.sendStatus(200);
 });
 
 app.listen(port, () => {
