@@ -9,3 +9,5 @@ spec:
   ports:
   - port: 80
     targetPort: 8080
+  - port: 6379
+    targetPort: 6379

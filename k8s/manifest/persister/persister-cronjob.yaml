@@ -1,0 +1,30 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: counter-sync-job
+  namespace: julien-dubois
+spec:
+  schedule: "*/5 * * * *" 
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: persister
+            image: redbeandock/do4-k8s-persister:latest
+            env:
+            - name: REDIS_HOST
+              value: counterapi
+            - name: REDIS_PORT
+              value: "6379"
+            - name: PG_HOST
+              value: postgres
+            - name: PG_PORT
+              value: "5432"
+            - name: PG_USER
+              value: postgres
+            - name: PG_PASSWORD
+              value: postgres
+            - name: PG_DATABASE
+              value: postgres
+          restartPolicy: OnFailure

@@ -38,3 +38,9 @@ Deploy Webapp:
 kubectl apply -f webapp/webapp-deployment.yaml
 kubectl apply -f webapp/webapp-service.yaml
 ```
+
+Deploy Persister:
+
+```bash
+kubectl apply -f webapp/persister-cronjob.yaml
+```
