@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 const cors = require("cors");
+const fetch = require("node-fetch");
 
 app.use(cors());
 
@@ -9,21 +10,25 @@ app.get("/", (req, res) => {
 });
 
 app.post("/count", (req, res) => {
-  fetch("http://counter-service:8080", {
+  return fetch("http://ms-service:8080", {
     method: "POST",
-  });
+  })
+    .then((response) => response.json())
+    .then((data) => res.json(data));
 });
 
 app.get("/count", (req, res) => {
-  fetch("http://counter-service:8080", {
+  return fetch("http://ms-service:8080", {
     method: "GET",
-  });
+  })
+    .then((response) => response.json())
+    .then((data) => res.json(data));
 });
 
 // prob healthz route for kubernetes : if counter-service is not available
 
 app.get("/health", (req, res) => {
-  let fetchResponse = fetch("http://counter-service:8080", {
+  let fetchResponse = fetch("http://ms-service:8080", {
     method: "GET",
   });
 

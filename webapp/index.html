@@ -8,12 +8,25 @@
     <h1>App</h1>
     <button onclick="incrementCounterA()">Incrémenter Counter</button>
 
+    <p>
+      Counter A :
+      <span id="counterA"> </span>
+    </p>
+
     <script>
       function incrementCounterA() {
-        $.post("/counter", function (data) {
+        $.post("/count", function (data) {
           console.log("Counter :", data.counterA);
         });
       }
+
+      function getCounterA() {
+        $.get("/count", function (data) {
+          document.getElementById("counterA").innerHTML = data.counter;
+        });
+      }
+
+      getCounterA();
     </script>
   </body>
 </html>
