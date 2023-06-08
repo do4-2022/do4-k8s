@@ -17,6 +17,17 @@ router.post("/increment", async (ctx) => {
   ctx.response.body = count;
 });
 
+router.get("/health", async (ctx) => {
+  try {
+    await getCounter();
+    ctx.response.body = "OK";
+    ctx.response.status = 200;
+  } catch (_err) {
+    ctx.response.body = "ERROR";
+    ctx.response.status = 500;
+  }
+});
+
 app.use(router.routes());
 
 await initDb(false);
