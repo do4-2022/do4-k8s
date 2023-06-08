@@ -1,9 +1,10 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: app-deployment
+  name: app
   labels:
     app: app
+  namespace: alexis-bernard
 spec:
   replicas: 1
   selector:
@@ -30,6 +31,8 @@ spec:
               value: "postgres"
             - name: POSTGRES_DB
               value: "postgres"
+            - name: REDIS_HOST
+              value: "redis"
           resources:
             limits:
               memory: "256Mi"

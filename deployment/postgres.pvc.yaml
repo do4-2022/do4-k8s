@@ -1,7 +1,8 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: polystore-postgres-persistent-volume-claim
+  name: k8s-postgres-persistent-volume-claim
+  namespace: alexis-bernard
 spec:
   accessModes:
     - ReadWriteOnce

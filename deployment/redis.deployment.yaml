@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis
+  namespace: alexis-bernard
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis
+  template:
+    metadata:
+      labels:
+        app: redis
+    spec:
+      containers:
+        - name: redis
+          image: bitnami/redis:7.0.9-debian-11-r5
+          ports:
+            - containerPort: 6379
+          env:
+            - name: ALLOW_EMPTY_PASSWORD
+              value: "yes"
+          resources:
+            limits:
+              memory: "1024Mi"
+              cpu: "1000m"

@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: postgres
+  namespace: alexis-bernard
 spec:
   replicas: 1
   selector:
@@ -13,9 +14,9 @@ spec:
         app: postgres
     spec:
       volumes:
-        - name: polystore-postgres
+        - name: k8s-postgres
           persistentVolumeClaim:
-            claimName: polystore-postgres-persistent-volume-claim
+            claimName: k8s-postgres-persistent-volume-claim
       containers:
         - name: postgres
           image: bitnami/postgresql:14.1.0-debian-10-r31
@@ -29,7 +30,7 @@ spec:
             - name: POSTGRESQL_DATABASE
               value: "postgres"
           volumeMounts:
-            - name: polystore-postgres
+            - name: k8s-postgres
               mountPath: postgres:/bitnami/postgresql
           resources:
             limits:
