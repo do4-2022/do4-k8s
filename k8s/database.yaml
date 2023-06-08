@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: database
+  namespace: esteban-baron
+  labels:
+    app: database
+spec:
+  selector:
+    matchLabels:
+      app: database
+  template:
+    metadata:
+      labels:
+        app: database
+    spec:
+      containers:
+        - name: database
+          image: mongo
+          ports:
+            - containerPort: 27017
+          env:
+            - name: MONGO_INITDB_ROOT_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: mongo-username
+                  key: username
+            - name: MONGO_INITDB_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mongo-password
+                  key: password
+      volumes:
+        - name: mongo-data
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mongo-username
+  namespace: esteban-baron
+type: Opaque
+data:
+  username: dXNlcm5hbWU=
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mongo-password
+  namespace: esteban-baron
+type: Opaque
+data:
+  password: cGFzc3dvcmQ=
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: database
+  namespace: esteban-baron
+spec:
+  selector:
+    app: database
+  ports:
+    - protocol: TCP
+      port:
+      targetPort:

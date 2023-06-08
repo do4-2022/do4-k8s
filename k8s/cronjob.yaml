@@ -1,0 +1,20 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: sync-database
+  namespace: esteban-baron
+  labels:
+    app: sync-database
+spec:
+  schedule: '* * * * *'
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: sync-database
+              image: estebanbaron/k8s-cronjob
+              imagePullPolicy: IfNotPresent
+              env:
+                - MONGODB_URI=mongodb://username:password@database:27017
+          restartPolicy: OnFailure
