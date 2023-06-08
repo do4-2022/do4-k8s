@@ -1,5 +1,5 @@
 {
-  "name": "web_app",
+  "name": "ms",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -11,8 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "axios": "^1.4.0",
     "express": "^4.18.2",
-    "fetch": "^1.1.0"
+    "redis": "^4.6.7"
   }
 }
