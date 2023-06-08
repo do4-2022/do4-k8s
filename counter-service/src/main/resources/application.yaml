@@ -1,0 +1,6 @@
+quarkus:
+  http:
+    port: 8080
+  flyway:
+    migrate-at-start: true
+    baseline-on-migrate: true
