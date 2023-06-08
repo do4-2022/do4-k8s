@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      volumes:
+        - name: polystore-postgres
+          persistentVolumeClaim:
+            claimName: polystore-postgres-persistent-volume-claim
+      containers:
+        - name: postgres
+          image: bitnami/postgresql:14.1.0-debian-10-r31
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRESQL_USER
+              value: "postgres"
+            - name: POSTGRESQL_PASSWORD
+              value: "postgres"
+            - name: POSTGRESQL_DATABASE
+              value: "postgres"
+          volumeMounts:
+            - name: polystore-postgres
+              mountPath: postgres:/bitnami/postgresql
+          resources:
+            limits:
+              memory: "4096Mi"
+              cpu: "4000m"

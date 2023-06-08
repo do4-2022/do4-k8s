@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gateway-deployment
+  labels:
+    app: gateway
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gateway
+  template:
+    metadata:
+      labels:
+        app: gateway
+    spec:
+      containers:
+        - name: gateway
+          image: ascoz/k8s-gateway:latest
+          ports:
+            - containerPort: 3000
+          env:
+            - name: SERVER_PORT
+              value: "3000"
+            - name: APP_URL
+              value: "http://app-service:80"
+          resources:
+            limits:
+              memory: "256Mi"
+              cpu: "500m"
