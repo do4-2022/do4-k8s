@@ -19,7 +19,6 @@ kubectl apply -f namespace.yaml
 Deploy Postgres:
 
 ```bash
-kubectl apply -f postgres/postgres-pv.yaml
 kubectl apply -f postgres/postgres-pvc.yaml
 kubectl apply -f postgres/postgres-deployment.yaml
 kubectl apply -f postgres/postgres-service.yaml
@@ -42,5 +41,5 @@ kubectl apply -f webapp/webapp-service.yaml
 Deploy Persister:
 
 ```bash
-kubectl apply -f webapp/persister-cronjob.yaml
+kubectl apply -f persister/persister-cronjob.yaml
 ```
