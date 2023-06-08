@@ -9,13 +9,13 @@ app.get("/", (req, res) => {
 });
 
 app.post("/count", (req, res) => {
-  fetch("http://counter-service", {
+  fetch("http://counter-service:8080", {
     method: "POST",
   });
 });
 
 app.get("/count", (req, res) => {
-  fetch("http://counter-service", {
+  fetch("http://counter-service:8080", {
     method: "GET",
   });
 });
@@ -23,7 +23,7 @@ app.get("/count", (req, res) => {
 // prob healthz route for kubernetes : if counter-service is not available
 
 app.get("/health", (req, res) => {
-  let fetchResponse = fetch("http://counter-service", {
+  let fetchResponse = fetch("http://counter-service:8080", {
     method: "GET",
   });
 
