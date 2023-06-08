@@ -1,0 +1,30 @@
+name: Build and Push Docker Images
+
+on:
+  push:
+    branches:
+      - master  # Ou la branche sur laquelle vous voulez que la CI s'exécute
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    environment: julien-dubois
+    strategy:
+      matrix:
+        service: ["counterapi", "persister", "webapp"]
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Login to DockerHub
+      uses: docker/login-action@v1
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+    - name: Build and push ${{ matrix.service }} image
+      uses: docker/build-push-action@v2
+      with:
+        context: ./${{ matrix.service }}
+        push: true
+        tags: redbeandock/do4-k8s-${{ matrix.service }}:latest
