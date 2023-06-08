@@ -11,7 +11,7 @@ export async function getStatus(): Promise<Status> {
   return json;
 }
 
-export async function increment(): Promise<Status> {
+export async function increment(): Promise<{ count: number }> {
   const result = await fetch(`${backend}/increment`, { method: "POST" });
   const json = await result.json();
   return json;

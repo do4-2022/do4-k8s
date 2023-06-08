@@ -1,28 +1,24 @@
 import { Application, Router } from "https://deno.land/x/oak@v11.1.0/mod.ts";
-import { getCounter, incrementCounter } from "./db.ts";
+import { getCounter, incrementCounter, initDb } from "./db.ts";
 
 const app = new Application();
 
 const router = new Router();
 
-router.get("/status", async () => {
+router.get("/status", async (ctx) => {
   const count = await getCounter();
 
-  return {
-    count,
-    alive: true,
-  };
+  ctx.response.body = count;
 });
 
-router.post("/increment", async () => {
+router.post("/increment", async (ctx) => {
   const count = await incrementCounter();
 
-  return {
-    count,
-    alive: true,
-  };
+  ctx.response.body = count;
 });
 
 app.use(router.routes());
+
+await initDb(false);
 
 await app.listen({ port: 3001 });

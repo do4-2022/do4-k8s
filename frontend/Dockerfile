@@ -3,6 +3,8 @@ FROM denoland/deno:1.33.3
 ARG GIT_REVISION
 ENV DENO_DEPLOYMENT_ID=${GIT_REVISION}
 
+ENV HOME=/deno-dir/
+
 WORKDIR /app
 
 # set user

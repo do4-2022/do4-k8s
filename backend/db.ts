@@ -17,27 +17,29 @@ const postgresUrl =
   Deno.env.get("POSTGRES_URL") ??
   "postgres://postgres:postgres@localhost:5432/postgres";
 
+console.log("redisHost", redisHost);
+console.log("postgresUrl", postgresUrl);
+
 let client: Client | undefined;
 
-async function initDb() {
-  let connected = false;
-
-  while (!connected) {
-    try {
-      client = new Client(postgresUrl);
-      await client.connect();
-      // create the table if it does not exist
-      await client.queryArray(
-        "CREATE TABLE IF NOT EXISTS counter (  id SERIAL PRIMARY KEY,  count INTEGER NOT NULL"
-      );
-      await client.queryArray(
-        "INSERT INTO my_table (id, count) VALUES (0, 0) ON CONFLICT (id) DO NOTHING;"
-      );
-      connected = true;
-    } catch (err) {
-      console.log(err);
-      client = undefined;
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+export async function initDb(throw_err = true) {
+  try {
+    console.log("Connecting to postgres");
+    client = new Client(postgresUrl);
+    await client.connect();
+    console.log("Creating table");
+    // create the table if it does not exist
+    await client.queryArray(
+      "CREATE TABLE IF NOT EXISTS counter (id SERIAL PRIMARY KEY,  count INTEGER NOT NULL)"
+    );
+    await client.queryArray(
+      "INSERT INTO counter (id, count) VALUES (0, 0) ON CONFLICT (id) DO NOTHING;"
+    );
+  } catch (err) {
+    console.log(err);
+    client = undefined;
+    if (throw_err) {
+      throw err;
     }
   }
 }
@@ -49,7 +51,6 @@ async function checkDb() {
     await new Promise((resolve) => setTimeout(resolve, 1000));
   }
 }
-await initDb();
 
 async function getRedisCount(): Promise<number> {
   return parseInt((await redis.get("count"))?.toString() ?? "0");
@@ -97,8 +98,10 @@ export async function copyCounter() {
 
 export async function incrementCounter(): Promise<{ count: number }> {
   let count = await getRedisCount();
+
+  count++;
   // update redis
-  count = parseInt(await redis.set("count", count + 1));
+  parseInt(await redis.set("count", count));
 
   return {
     count,

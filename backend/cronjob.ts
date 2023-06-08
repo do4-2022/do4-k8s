@@ -1,3 +1,4 @@
-import { copyCounter } from "./db.ts";
+import { copyCounter, initDb } from "./db.ts";
 
+await initDb(true);
 await copyCounter();

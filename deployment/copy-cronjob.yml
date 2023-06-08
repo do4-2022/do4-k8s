@@ -11,12 +11,12 @@ spec:
         spec:
           containers:
             - name: counter-cronjob
-              image: sautax/counter-cronjob:latest
+              image: sautax/counter-cronjob:0.0.7
               imagePullPolicy: IfNotPresent
               env:
                 - name: REDIS_HOST
-                  value: counter-ms
+                  value: counter-api
                 - name: POSTGRES_URL
-                  value: postgres://postgres:postgres@postgres:5432/postgres
+                  value: postgres://postgres:postgres@database:5432/postgres
 
           restartPolicy: OnFailure
