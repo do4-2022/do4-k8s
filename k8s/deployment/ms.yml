@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+namespace: pizzolitto
+metadata:
+  name: ms-deployment
+  namespace: pizzolitto
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ms
+  template:
+    metadata:
+      labels:
+        app: ms
+    spec:
+      containers:
+        - name: ms
+          image: maximepizzolitto/ms
+          ports:
+            - containerPort: 8080
+          # env:
+          #   - name: DB_URL
+          #     value: "jdbc:postgresql://database-service:5432/postgres"
+          # envFrom:
+          #   - secretRef:
+          #       name: secret1
+          #   - secretRef:
+          #       name: secret2
+        - name: redis
+          image: redis
+          ports:
+            - containerPort: 6379
