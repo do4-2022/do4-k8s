@@ -1,0 +1,22 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  namespace: nils-ponsard
+  name: copy-redis-postgres
+spec:
+  schedule: "* * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: counter-cronjob
+              image: counter-cronjob:latest
+              imagePullPolicy: IfNotPresent
+              env:
+                - name: REDIS_HOST
+                  value: counter-ms
+                - name: POSTGRES_URL
+                  value: postgres://postgres:postgres@postgres:5432/postgres
+
+          restartPolicy: OnFailure

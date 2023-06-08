@@ -6,8 +6,10 @@ interface Status {
   alive: boolean;
 }
 
+const redisHost = Deno.env.get("REDIS_HOST") ?? "127.0.0.1";
+
 const redis = await connect({
-  hostname: "127.0.0.1",
+  hostname: redisHost,
   port: 6379,
 });
 
