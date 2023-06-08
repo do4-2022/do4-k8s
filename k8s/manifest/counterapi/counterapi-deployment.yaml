@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: counterapi
+  namespace: julien-dubois
+spec:
+  selector:
+    matchLabels:
+      app: counterapi
+  template:
+    metadata:
+      labels:
+        app: counterapi
+    spec:
+      containers:
+      - name: counterapi
+        image: redbeandock/do4-k8s-counterapi:latest
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 8080
+      - name: redis
+        image: redis:7.2-rc2-alpine
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 6379

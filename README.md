@@ -4,15 +4,21 @@ Welcome to my version of **do4-k8s**
 
 ## Deploy in cluster
 
+Move into k8s folder:
+
+```bash
+cd k8s/manifest
+```
+
 Create namespace:
 
 ```bash
-kubectl apply -f infra/namespace.yaml
+kubectl apply -f namespace.yaml
 ```
 
 Deploy webapp:
 
 ```bash
-kubectl apply -f infra/webapp/webapp-deployment.yaml
-kubectl apply -f infra/webapp/webapp-service.yaml
+kubectl apply -f webapp/webapp-deployment.yaml
+kubectl apply -f webapp/webapp-service.yaml
 ```
