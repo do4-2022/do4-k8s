@@ -1,36 +1,58 @@
 # do4-k8s : Maxime PIZZOLITTO
 
-## Webapp
+## Application
+
+### Webapp
 
 L'application est composée d'un serveur express qui sert une page html sur /.
 Il y a egalement les routes /counter (get) et /counter (post) qui permettent de recuperer et d'incrementer un compteur.
 Pour finir, il y a une route /health qui permet de verifier que le MS que l'API utilise est bien up.
 
-### Build
+#### Build
 
 ```bash
 docker build . -t maximepizzolitto/webapp
 ```
 
-### Push
+#### Push
 
 ```bash
 docker push maximepizzolitto/webapp
 ```
 
-## Microservice (MS)
+### Microservice (MS)
 
 Le MS est un serveur express qui sert la route / en post qui permet d'incrementer un compteur et get qui permet de recuperer le compteur.
 Le service tente d'abord de récupérer le compteur depuis PG, si il n'y arrive pas, il le récupère depuis Redis.
 
-### Build
+#### Build
 
 ```bash
 docker build . -t maximepizzolitto/ms
 ```
 
-### Push
+#### Push
 
 ```bash
 docker push maximepizzolitto/ms
 ```
+
+### Cronjob
+
+## Déploiement
+
+### Secrets
+
+Pour déployer, il faut d'abord créer les secrets :
+
+```bash
+kubectl create secret generic database-credential --namespace=<ns> --from-literal=db_user=<user> --from-literal=db_password=<password>
+```
+
+Pour déployer, rendez-vous dans le dossier k8s et executez la commande suivante :
+
+```bash
+./kube.sh apply
+```
+
+C'est un fichier bash qui va lancer les commandes kubectl pour déployer les différents fichiers yaml.
