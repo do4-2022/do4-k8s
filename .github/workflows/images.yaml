@@ -10,7 +10,7 @@ jobs:
     environment: alexis-bernard
     strategy:
       matrix:
-        service: [app, gateway]
+        service: [app, gateway, scheduler]
 
     steps:
       # Checkout repository
