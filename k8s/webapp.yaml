@@ -16,9 +16,14 @@ spec:
     spec:
       containers:
         - name: webapp
-          image: nginx # estebanbaron/k8s-webapp
+          image: estebanbaron/k8s-webapp
           ports:
-            - containerPort: 80
+            - containerPort: 3000
+          env:
+            - name: API_BASE_URL
+              value: http://api:3001
+            - name: API_BASE_URL_BROWSER
+              value: http://161.35.244.246:3001 # change with api service ip
 ---
 apiVersion: v1
 kind: Service
@@ -31,5 +36,5 @@ spec:
   ports:
     - protocol: TCP
       port: 3000
-      targetPort: 80
+      targetPort: 3000
   type: LoadBalancer

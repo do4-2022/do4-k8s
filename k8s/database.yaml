@@ -62,5 +62,6 @@ spec:
     app: database
   ports:
     - protocol: TCP
-      port:
-      targetPort:
+      port: 27017
+      targetPort: 27017
+  type: ClusterIP
