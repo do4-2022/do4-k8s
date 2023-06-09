@@ -1,27 +1,30 @@
-// index.js
-
 const express = require('express');
 const axios = require('axios');
+const cors = require('cors');
+require('dotenv').config();
 
 const app = express();
+app.use(cors());
+
+const apiBaseUrl = process.env.API_BASE_URL || 'http://localhost:3001';
 
 // Route GET pour afficher la page HTML
 app.get('/', async (req, res) => {
   try {
     // Appel du microservice A pour obtenir le compteur
-    const response = await axios.get('http://localhost:3001/api/count');
+    const response = await axios.get(apiBaseUrl + '/api/count');
 
     res.send(`
       <html>
         <body>
-          <h1>Page principale</h1>
-          <h2>Microservice A</h2>
+          <h1>Test app</h1>
+          <h2>My Microservice</h2>
           <p>Compteur: ${response.data.counter}</p>
           <button onclick="incrementCounter()">+</button>
           <script>
             async function incrementCounter() {
               try {
-                await fetch('http://localhost:3001/api/count', {
+                await fetch('${apiBaseUrl}/api/count', {
                   method: 'POST',
                 });
       
@@ -37,13 +40,8 @@ app.get('/', async (req, res) => {
       </html>
     `);
   } catch (error) {
-    console.error(
-      'Erreur lors de la communication avec le microservice A:',
-      error
-    );
-    res
-      .status(500)
-      .send('Erreur lors de la communication avec le microservice A');
+    console.error('Error communicating with api:', error);
+    res.status(500).send('Error communicating with api');
   }
 });
 
@@ -56,7 +54,7 @@ app.get('/probe/liveness', (req, res) => {
 app.get('/probe/readiness', async (req, res) => {
   try {
     // Vérification de la disponibilité du microservice A
-    await axios.get('http://localhost:3001/probe/liveness');
+    await axios.get(apiBaseUrl + '/probe/liveness');
     res.sendStatus(200);
   } catch (error) {
     res.sendStatus(500);
@@ -65,5 +63,5 @@ app.get('/probe/readiness', async (req, res) => {
 
 // Démarrer le serveur
 app.listen(3000, () => {
-  console.log('Serveur démarré sur le port 3000');
+  console.log('Webapp running on http://localhost:3000');
 });
