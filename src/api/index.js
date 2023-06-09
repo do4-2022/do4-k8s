@@ -6,8 +6,10 @@ require('dotenv').config();
 const app = express();
 app.use(cors());
 
+const REDIS_URL = process.env.REDIS_URL || 'redis://localhost:6379';
+
 // Connexion à Redis
-const redisClient = redis.createClient();
+const redisClient = redis.createClient({ url: REDIS_URL });
 const redisConnction = redisClient.connect();
 redisClient.on('error', (err) => console.log('Redis client Error', err));
 

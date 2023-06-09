@@ -1,16 +1,12 @@
 const redis = require('redis');
 const MongoClient = require('mongodb').MongoClient;
-const dotenv = require('dotenv');
+require('dotenv').config();
 
-dotenv.config();
+const REDIS_URL = process.env.REDIS_URL || 'redis://localhost:6379';
+const MONGODB_URL = process.env.MONGODB_URI || '';
 
 // Connexion à Redis
-const redisClient = redis.createClient(
-  process.env.REDIS_URL || 'redis://localhost:6379'
-);
-
-// Connexion à MongoDB
-const mongoURI = process.env.MONGODB_URI || '';
+const redisClient = redis.createClient({ url: REDIS_URL });
 
 const syncDatabase = async () => {
   redisClient.connect();
@@ -31,7 +27,7 @@ const syncDatabase = async () => {
   // Mise à jour de la valeur du compteur dans MongoDB
   try {
     // Connexion à MongoDB
-    const client = await MongoClient.connect(mongoURI, {
+    const client = await MongoClient.connect(MONGODB_URL, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
