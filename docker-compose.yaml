@@ -1,9 +1,27 @@
 version: '3'
 services:
+  webapp:
+    # image: estebanbaron/k8s-webapp
+    build:
+      context: src/webapp
+    ports:
+      - 3000:3000
+    environment:
+      - API_BASE_URL=http://api:3001
+      - API_BASE_URL_BROWSER=http://localhost:3001
+
+  api:
+    build:
+      context: src/api
+    ports:
+      - 3001:3001
+    environment:
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      - redis
+
   redis:
     image: redis
-    ports:
-      - 6379:6379
     volumes:
       - redis-data:/data
     environment:
@@ -17,8 +35,8 @@ services:
     volumes:
       - mongo-data:/data/db
     environment:
-      - MONGO_INITDB_ROOT_USERNAME=admin
-      - MONGO_INITDB_ROOT_PASSWORD=secret
+      - MONGO_INITDB_ROOT_USERNAME=username
+      - MONGO_INITDB_ROOT_PASSWORD=password
 
 volumes:
   redis-data:
