@@ -1,0 +1,32 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: scheduler
+  labels:
+    app: scheduler
+  namespace: alexis-bernard
+spec:
+  schedule: "* * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: scheduler
+              image: ascoz/k8s-scheduler:latest
+              env:
+                - name: POSTGRES_HOST
+                  value: "postgres"
+                - name: POSTGRES_USER
+                  value: "postgres"
+                - name: POSTGRES_PASSWORD
+                  value: "postgres"
+                - name: POSTGRES_DB
+                  value: "postgres"
+                - name: REDIS_HOST
+                  value: "redis"
+              resources:
+                limits:
+                  memory: "128Mi"
+                  cpu: "100m"
+          restartPolicy: OnFailure
