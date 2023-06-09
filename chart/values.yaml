@@ -1,0 +1,55 @@
+counterService:
+  replicaCount: 1
+
+  image: ghcr.io/do4-2022/do4-k8s-alexandre-gomez-counter-service:alexandre-gomez
+
+  service:
+    internalPort: 8080
+    externalPort: 8080
+    type: LoadBalancer
+
+  resources:
+    limits:
+      cpu: 100m
+      memory: 128Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+
+postgres:
+  replicaCount: 1
+
+  config:
+    username: postgres
+    password: postgres
+    database: counter
+
+  persistence:
+    size: 1Gi
+    storageClass: do-block-storage-retain
+
+  resources:
+    limits:
+      cpu: 100m
+      memory: 128Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+
+redis:
+  replicaCount: 1
+
+  config:
+    password: redis
+
+  persistence:
+    size: 1Gi
+    storageClass: do-block-storage-retain
+
+  resources:
+    limits:
+      cpu: 100m
+      memory: 128Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi

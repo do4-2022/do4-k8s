@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ .Release.Name }}-postgres
+  labels:
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}"
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-postgres
+  replicas: {{ default 1 .Values.postgres.replicaCount | int }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-postgres
+    spec:
+      containers:
+      - name: {{ .Chart.Name }}
+        image: bitnami/postgresql:15.3.0
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 5432
+        env:
+        - name: POSTGRESQL_USERNAME
+          valueFrom:
+            configMapKeyRef:
+              name: {{ .Release.Name }}-postgres
+              key: username
+        - name: POSTGRESQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Release.Name }}-postgres
+              key: password
+        - name: POSTGRESQL_DATABASE
+          valueFrom:
+            configMapKeyRef:
+              name: {{ .Release.Name }}-postgres
+              key: database
+        # livenessProbe:
+        #   httpGet:
+        #     path: /
+        #     port: 5432
+        # readinessProbe:
+        #   httpGet:
+        #     path: /
+        #     port: 5432
+        resources:
+{{ toYaml .Values.postgres.resources | indent 10 }}
+        volumeMounts:
+        - name: {{ .Release.Name }}-postgres-data
+          mountPath: /bitnami/postgresql
+        securityContext:
+          runAsUser: 0
+          fsGroup: 1001
+  volumeClaimTemplates:
+  - metadata:
+      name: {{ .Release.Name }}-postgres-data
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: {{ .Values.postgres.persistence.size }}
+      storageClassName: {{ .Values.postgres.persistence.storageClass }}

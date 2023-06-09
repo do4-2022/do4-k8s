@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ .Release.Name }}-redis
+  labels:
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}"
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-redis
+  replicas: {{ default 1 .Values.redis.replicaCount | int }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-redis
+    spec:
+      containers:
+      - name: {{ .Chart.Name }}
+        image: bitnami/redis:6.2.12
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 6379
+        env:
+        - name: REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Release.Name }}-redis
+              key: password
+        # livenessProbe:
+        #   httpGet:
+        #     path: /
+        #     port: 5432
+        # readinessProbe:
+        #   httpGet:
+        #     path: /
+        #     port: 5432
+        resources:
+{{ toYaml .Values.redis.resources | indent 10 }}
+        volumeMounts:
+        - name: {{ .Release.Name }}-redis-data
+          mountPath: /bitnami/redis
+        securityContext:
+          runAsUser: 0
+          fsGroup: 1001
+  volumeClaimTemplates:
+  - metadata:
+      name: {{ .Release.Name }}-redis-data
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: {{ .Values.redis.persistence.size }}
+      storageClassName: {{ .Values.redis.persistence.storageClass }}
