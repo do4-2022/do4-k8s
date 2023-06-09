@@ -1,9 +1,10 @@
 const express = require('express');
 const redis = require('redis');
+const cors = require('cors');
 require('dotenv').config();
 
-// Création du routeur Express
 const app = express();
+app.use(cors());
 
 // Connexion à Redis
 const redisClient = redis.createClient();
@@ -82,5 +83,5 @@ app.get('/probe/liveness', (req, res) => {
 });
 
 app.listen(3001, () => {
-  console.log('Microservice A running on http://localhost:3001');
+  console.log('API running on http://localhost:3001');
 });
