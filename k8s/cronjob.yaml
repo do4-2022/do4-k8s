@@ -17,4 +17,5 @@ spec:
               imagePullPolicy: IfNotPresent
               env:
                 - MONGODB_URI=mongodb://username:password@database:27017
+                - REDIS_URL=redis://redis:6379
           restartPolicy: OnFailure

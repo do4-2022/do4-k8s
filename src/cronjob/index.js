@@ -5,7 +5,9 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 // Connexion à Redis
-const redisClient = redis.createClient();
+const redisClient = redis.createClient(
+  process.env.REDIS_URL || 'redis://localhost:6379'
+);
 
 // Connexion à MongoDB
 const mongoURI = process.env.MONGODB_URI || '';
