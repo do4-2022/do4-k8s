@@ -31,7 +31,7 @@ const service = class {
 
     const { rows } = await this.pool.query("SELECT * FROM counts");
 
-    console.log("Incremented count in redis:", rows[0].count);
+    console.log("Incremented count in postgres:", rows[0].count);
   }
 };
 
